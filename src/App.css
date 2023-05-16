@@ -1,38 +1,269 @@
-.App {
-  text-align: center;
+@import url("https://fonts.bunny.net/css?family=Nunito");
+@import url("https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css");
+@import url("https://fonts.googleapis.com/css?family=Titillium+Web:300");
+@font-face {
+  font-family: "Titillium Web";
+  font-style: normal;
+  font-weight: 300;
+  src: local("Titillium WebLight"), local("TitilliumWeb-Light"), url(http://themes.googleusercontent.com/static/fonts/titilliumweb/v2/anMUvcNT0H1YN4FII8wpr24bNCNEoFTpS2BTjF6FB5E.woff) format("woff");
+}
+body {
+  background-color: #EFF2F7;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.iconMenu {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  min-width: 46px;
+}
+.iconMenu .fa-2x {
+  font-size: 2em;
+}
+.iconMenu .fa {
+  position: relative;
+  display: block;
+  text-align: center;
+  font-size: 24px;
+  color: #21232F;
+}
+
+.content {
+  margin-left: 76px;
+}
+
+.main-menu {
+  background: #FFFFFF;
+  box-shadow: 0 0 5px #e1e1e2;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  height: 100%;
+  left: 0;
+  width: 76px;
+  transition: width 0.05s linear;
+  z-index: 1000;
+  transition: 0.3s;
+}
+.main-menu .logoBlock {
+  width: 100%;
+  margin: 15px 0;
+  display: flex;
+  justify-content: center;
+}
+.main-menu .logout {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  padding: 15px;
+}
+.main-menu .logout li a:hover {
+  background-color: #a30404;
+}
+.main-menu ul {
+  padding: 0 15px;
+  margin-top: 100px;
+  list-style: none;
+}
+.main-menu ul li {
+  position: relative;
+  display: block;
+  margin: 5px 0;
+  z-index: 10;
+}
+.main-menu ul li .activeMenu {
+  background-color: #21232F;
+  transition: 0.4s;
+}
+.main-menu ul li .activeMenu .fa {
   color: white;
 }
-
-.App-link {
-  color: #61dafb;
+.main-menu ul li .activeMenu .nav-text {
+  color: white;
+}
+.main-menu ul li a {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border-collapse: collapse;
+  border-spacing: 0;
+  font-family: arial;
+  font-size: 14px;
+  text-decoration: none;
+  transition: 0.4s;
+  border-radius: 10px;
+  overflow: hidden;
+  height: 46px;
+  width: 46px;
+}
+.main-menu ul li a:hover {
+  background-color: #21232F;
+  width: -moz-fit-content;
+  width: fit-content;
+}
+.main-menu ul li a:hover .fa {
+  color: white;
+}
+.main-menu ul li a:hover .nav-text {
+  color: white;
+}
+.main-menu ul li a .nav-text {
+  position: relative;
+  display: block;
+  font-family: "Arial", sans-serif;
+  color: #21232F;
+  font-size: 15px;
+  font-weight: 500;
+  white-space: nowrap;
+  margin-right: 12px;
 }
 
-@keyframes App-logo-spin {
-  from {
+input[type=file]::file-selector-button {
+  margin-right: 20px;
+  border: none;
+  background: #084cdf;
+  padding: 10px 20px;
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+}
+
+input[type=file]::file-selector-button:hover {
+  background: #0d45a5;
+}
+
+.selectInp {
+  display: none;
+  margin-right: 10px;
+}
+
+.btnSelect {
+  margin: 35px 0;
+}
+
+.selectedImg {
+  margin-left: 15px;
+}
+
+.pageList {
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  padding: 40px;
+}
+.pageList .ListColumn {
+  background-color: #FFFFFF;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 0 5px #e1e1e2;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.pageList .ListColumn .tableHeader {
+  display: flex;
+  justify-content: space-between;
+}
+.pageList .ListColumn .tableHeader h2 {
+  display: block;
+}
+.pageList .ListColumn .tableHeader a {
+  background-color: #21232F;
+  display: flex;
+  align-items: center;
+}
+.pageList .ListColumn .tableHeader a span {
+  margin-left: 10px;
+  font-weight: 500;
+}
+.pageList .ListColumn .tableHeader a i {
+  font-size: 26px;
+}
+.pageList .ListColumn .listCategories th {
+  color: #686767;
+  font-size: 13px;
+}
+.pageList .ListColumn .listCategories th .allCheck {
+  font-size: 16px;
+}
+.pageList .ListColumn .listCategories td {
+  color: #21232F;
+  font-weight: 500;
+}
+.pageList .ListColumn .listCategories td a {
+  cursor: pointer;
+  margin: 0 5px;
+}
+.pageList .ListColumn .listCategories td .btnDelete {
+  color: #a30404;
+  font-size: 24px;
+}
+.pageList .ListColumn .listCategories td .btnEdit {
+  color: #444343;
+  font-size: 24px;
+}
+.pageList .ListColumn .listCategories .ok {
+  border-radius: 15px;
+  width: -moz-fit-content;
+  width: fit-content;
+  background-color: green;
+  padding: 1px 10px;
+}
+.pageList .ListColumn .listCategories .ok span {
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+}
+.pageList .ListColumn .listCategories .no {
+  border-radius: 15px;
+  width: -moz-fit-content;
+  width: fit-content;
+  padding: 1px 10px;
+  background-color: rgb(190, 7, 7);
+}
+.pageList .ListColumn .listCategories .no span {
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.error {
+  color: #a30404;
+  font-size: 16px;
+  height: 16px;
+  margin: 4px 0;
+}
+
+input[type=checkbox] {
+  margin-right: 5px;
+}
+
+.loader-container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  background: rgba(0, 0, 0, 0.834);
+  z-index: 1;
+}
+
+.spinner {
+  width: 64px;
+  height: 64px;
+  border: 8px solid;
+  border-color: #3d5af1 transparent #3d5af1 transparent;
+  border-radius: 50%;
+  animation: spin-anim 1.2s linear infinite;
+}
+
+@keyframes spin-anim {
+  0% {
     transform: rotate(0deg);
   }
-  to {
+  100% {
     transform: rotate(360deg);
   }
-}
+}/*# sourceMappingURL=App.css.map */
