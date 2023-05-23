@@ -36,8 +36,8 @@ const CreateCategory = () => {
         data.append('status', values.status.toString());
         data.append('description', values.description);
         axios.post("http://127.0.0.1:8000/api/categories/", data).then(() => {
-            // navigator("/List");
-            // navigator(0);
+            navigator("/List");
+            navigator(0);
         });
         
     }

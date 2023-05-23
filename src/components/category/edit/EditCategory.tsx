@@ -66,9 +66,12 @@ const EditCategory = () => {
         data.append('status', check);
         data.append('description', values.description);
         console.log(values.image);
-        axios.post("http://127.0.0.1:8000/api/category/" + searchParams.get("id"), data).then(() => {
-            // navigator("/List");
-            // navigator(0);
+        var check = "false";
+        if (values.imgChange)
+            check = "true";
+        axios.post("http://127.0.0.1:8000/api/category/" + searchParams.get("id") + "/" + check, data).then(() => {
+            navigator("/List");
+            navigator(0);
         });
 
 
@@ -92,6 +95,7 @@ const EditCategory = () => {
         if (event.target.files) {
             console.log("set");
             formik.setFieldValue("image", event.target.files[0]);
+            console.log(values);
             values.image = event.target.files[0];
             setImage(URL.createObjectURL(event.target.files[0]));
             formik.setFieldValue("imgChange", true);
@@ -159,6 +163,7 @@ const EditCategory = () => {
                     </button>
                 </form>
             </div>
+            
         </div>
     );
 };

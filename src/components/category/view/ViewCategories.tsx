@@ -6,6 +6,7 @@ import classNames from "classnames";
 import axios from "axios";
 import { APP_ENV } from "../../../env";
 import { useNavigate, Link, useSearchParams } from "react-router-dom";
+import { Modal } from 'bootstrap';
 
 const ViewCategories = () => {
 
@@ -18,6 +19,7 @@ const ViewCategories = () => {
     });
     const [isLoading, setLoading] = useState<boolean>();
     const [searchParams, setSearchParams] = useSearchParams();
+    const [deleteId, setId] = useState<number>();
     console.log("page = ", searchParams.get("page"));
 
 
@@ -45,9 +47,9 @@ const ViewCategories = () => {
         buttons.push(i);
     }
 
-    const getItems = (page:any) => {
+    const getItems = (page: any) => {
         setLoading(true);
- 
+
         axios.get<ICategoryResponse>(
             `${APP_ENV.BASE_URL}/categories`, {
             params: page,
@@ -60,12 +62,12 @@ const ViewCategories = () => {
     }
 
     const pagination = buttons.map((page) => (
-        
+
         <li className={classNames("page-item", { "active": page === current_page })}>
             <Link
                 className="page-link"
                 to={"?page=" + page}
-                onClick={ () => {  setSearch({page: page || 1}); getItems({page: page})}}
+                onClick={() => { setSearch({ page: page || 1 }); getItems({ page: page }) }}
             >
                 {page}
 
@@ -74,9 +76,11 @@ const ViewCategories = () => {
     )
     );
 
-    const deleteCategory = (id: number) => {
-        console.log(id);
-        axios.delete('http://127.0.0.1:8000/api/categories/' + id)
+    const deleteConfirmed = () => {
+        console.log(1);
+
+
+        axios.delete('http://127.0.0.1:8000/api/categories/' + deleteId)
             .then(() => {
                 axios.get(
                     "http://127.0.0.1:8000/api/categories")
@@ -86,6 +90,25 @@ const ViewCategories = () => {
                         setItems(json);
                     })
             });
+    }
+
+    const deleteCategory = (id: number) => {
+        console.log(id);
+        const myElement = document.getElementById("exampleModal") as HTMLElement;
+        setId(id);
+        const myModal = new Modal(myElement);
+        myModal.show();
+
+        // axios.delete('http://127.0.0.1:8000/api/categories/' + id)
+        //     .then(() => {
+        //         axios.get(
+        //             "http://127.0.0.1:8000/api/categories")
+        //             .then((res) => res.data)
+        //             .then((json) => {
+        //                 setLoading(false);
+        //                 setItems(json);
+        //             })
+        //     });
     }
 
 
@@ -154,9 +177,10 @@ const ViewCategories = () => {
                                             {item.description}
                                         </td>
                                         <td>
-                                            <a onClick={() => deleteCategory(item.id)}><i className='fa fa-trash btnDelete'></i></a>
+                                            <a  onClick={() => deleteCategory(item.id)} ><i className='fa fa-trash btnDelete'></i></a>
                                             <Link to={"/Editcategory?id=" + item.id}><i className='fa fa-edit btnEdit'></i></Link>
                                         </td>
+
                                     </tr>
                                 ))
 
@@ -167,6 +191,21 @@ const ViewCategories = () => {
                         </tbody>
                     </table>
                     <ul className="pagination justify-content-center">{pagination}</ul>
+                </div>
+                <div className="modal fade" id="exampleModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title" id="exampleModalLabel">Confirm delete</h5>
+                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" >Cancel</button>
+                                <button type="button" onClick={() => deleteConfirmed()} className="btn btn-primary" data-bs-dismiss="modal">Delete</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         )
