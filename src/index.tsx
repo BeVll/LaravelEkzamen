@@ -7,19 +7,44 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import CreateCategory from './components/category/create/CreateCategory';
 import ViewCategories from './components/category/view/ViewCategories';
 import EditCategory from './components/category/edit/EditCategory';
+import { Provider } from "react-redux";
+import { store } from "./store";
+import jwtDecode from "jwt-decode";
+import { AuthUserActionType, IUser } from "./components/auth/types";
+import {http} from "./http";
+import LoginView from './components/auth/login/LoginView';
+import RegistrationView from './components/auth/registration/RegistrationView';
+
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
+if (localStorage.token) {
+  http.defaults.headers.common['Authorization'] = `Bearer ${localStorage.token}`;
+  const user = jwtDecode(localStorage.token) as IUser;
+  store.dispatch({
+    type: AuthUserActionType.LOGIN_USER, payload: {
+      email: user.email,
+      name: user.name,
+      image: user.image
+    } as IUser
+  });
+}
+
 root.render(
-  <BrowserRouter>
+  <Provider store={store}>
+    <BrowserRouter>
     <Routes>
-          <Route path="/" element={<App />}>
-            <Route path="List" element={<ViewCategories/>} />
-            <Route path="Addcategory" element={<CreateCategory/>} />
-            <Route path="Editcategory" element={<EditCategory/>} />
-          </Route>
-        </Routes>
+        <Route path="/" element={<App />}>
+          <Route index element={<ViewCategories />} />
+          <Route path="Addcategory" element={<CreateCategory />} />
+          <Route path="Editcategory" element={<EditCategory />} />
+          <Route path="login" element={<LoginView />} />
+          <Route path="register" element={<RegistrationView />} />
+        </Route>
+      </Routes>
     </BrowserRouter>
+  </Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function

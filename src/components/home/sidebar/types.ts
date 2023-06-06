@@ -4,3 +4,7 @@ export interface IMenuProps {
     icon:string,
     name:string,
 }
+
+export interface ISidebarProps {
+    page:number
+}

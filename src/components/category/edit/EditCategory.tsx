@@ -5,6 +5,9 @@ import * as yup from "yup";
 import classNames from "classnames";
 import axios from "axios";
 import { useNavigate, Link, useSearchParams } from "react-router-dom";
+import { AuthUserActionType, IAuthUser } from "../../auth/types";
+import { useDispatch, useSelector } from "react-redux";
+import { APP_ENV } from "../../../env";
 
 const EditCategory = () => {
 
@@ -12,18 +15,26 @@ const EditCategory = () => {
     const [image, setImage] = useState<string>();
     const [searchParams, setSearchParams] = useSearchParams();
     const [isLoading, setLoading] = useState<boolean>();
+    const { isAuth, user } = useSelector((store: any) => store.auth as IAuthUser);
 
     useEffect(() => {
-        getCategory();
+        console.log(isAuth);
+        if (isAuth == false) {
+            navigator("/login");
+        }
+        else {
+            getCategory();
+        }
+
     }, []);
 
     const getCategory = () => {
         console.log("id: " + searchParams.get('id'));
-        axios.get('http://127.0.0.1:8000/api/category/' + searchParams.get('id'))
+        axios.get(APP_ENV.BASE_URL+'/category/' + searchParams.get('id'))
             .then((res) => res.data)
             .then(async (json) => {
                 setLoading(false);
-                setImage("http://127.0.0.1:8000/storage/images/categories/" + json.image)
+                setImage("http://bevl.com/storage/images/categories/" + json.image)
 
                 if (json.status == 1)
                     json.status = true;
@@ -66,11 +77,12 @@ const EditCategory = () => {
         data.append('status', check);
         data.append('description', values.description);
         console.log(values.image);
+        setLoading(true);
         var check = "false";
         if (values.imgChange)
             check = "true";
-        axios.post("http://127.0.0.1:8000/api/category/" + searchParams.get("id") + "/" + check, data).then(() => {
-            navigator("/List");
+        axios.post(APP_ENV.BASE_URL+"/category/" + searchParams.get("id") + "/" + check, data).then(() => {
+            navigator("/");
             navigator(0);
         });
 
@@ -105,66 +117,72 @@ const EditCategory = () => {
     const { values, errors, touched, handleSubmit, handleChange } = formik;
 
     return (
-        <div className='pageList'>
-            <div className='ListColumn'>
-                <div className='tableHeader'>
-                    <h2>Edit category</h2>
-
-                    <Link to="/List" className='btn btn-success'>
-
-                        <i className='fa fa-2x fa-chevron-circle-left '></i>
-                        <span>Back</span>
-                    </Link>
-                </div>
-                <form onSubmit={handleSubmit}>
-                    <div className="mb-3">
-                        <label htmlFor="name" className="form-label">Name</label>
-                        <input
-                            type="text"
-                            className={classNames("form-control", { "is-invalid": errors.name && touched.name })}
-                            id="name"
-                            name="name"
-                            value={values.name}
-                            onChange={handleChange}
-                        />
-                        {errors.name && touched.name && <div className="invalid-feedback">{errors.name}</div>}
-
-                    </div>
-                    <div className="mb-3">
-                        <input type="file" id="selectedFile" className='selectInp' name="img" accept="image/*" onChange={changeImage}></input>
-                        <input type="button" className='btn btn-primary btnSelect' value="Select image" onClick={clickSelect} />
-                        <img className='selectedImg' src={image} height={100}></img>
-                        {errors.name && touched.name && <div className="invalid-feedback">{errors.name}</div>}
-                    </div>
-                    <div className="mb-3 form-check form-switch">
-
-                        <input type="checkbox" className="form-check-input" onChange={handleChange} checked={values.status} id="status">
-
-                        </input>
-                        <label htmlFor="status" className="form-label">Status</label>
-                    </div>
-                    <div className=" mb-3">
-                        <label htmlFor="description" className="form-label">Description</label>
-                        <textarea
-                            className={classNames("form-control", { "is-invalid": errors.description && touched.description })}
-
-                            id="description"
-                            name="description"
-                            style={{ height: "100px" }}
-                            value={values.description}
-                            onChange={handleChange}
-                        ></textarea>
-                        {errors.description && touched.description && <div className="invalid-feedback">{errors.description}</div>}
-
-                    </div>
-
-                    <button type="submit" className="btn btn-primary">
-                        Save
-                    </button>
-                </form>
+        isLoading ? (
+            <div className="loader-container">
+                <div className="spinner"></div>
             </div>
-            
-        </div>
+        ) : (
+            <div className='pageList'>
+                <div className='ListColumn'>
+                    <div className='tableHeader'>
+                        <h2>Edit category</h2>
+
+                        <Link to="/List" className='btn btn-success'>
+
+                            <i className='fa fa-2x fa-chevron-circle-left '></i>
+                            <span>Back</span>
+                        </Link>
+                    </div>
+                    <form onSubmit={handleSubmit}>
+                        <div className="mb-3">
+                            <label htmlFor="name" className="form-label">Name</label>
+                            <input
+                                type="text"
+                                className={classNames("form-control", { "is-invalid": errors.name && touched.name })}
+                                id="name"
+                                name="name"
+                                value={values.name}
+                                onChange={handleChange}
+                            />
+                            {errors.name && touched.name && <div className="invalid-feedback">{errors.name}</div>}
+
+                        </div>
+                        <div className="mb-3">
+                            <input type="file" id="selectedFile" className='selectInp' name="img" accept="image/*" onChange={changeImage}></input>
+                            <input type="button" className='btn btn-primary btnSelect' value="Select image" onClick={clickSelect} />
+                            <img className='selectedImg' src={image} height={100}></img>
+                            {errors.name && touched.name && <div className="invalid-feedback">{errors.name}</div>}
+                        </div>
+                        <div className="mb-3 form-check form-switch">
+
+                            <input type="checkbox" className="form-check-input" onChange={handleChange} checked={values.status} id="status">
+
+                            </input>
+                            <label htmlFor="status" className="form-label">Status</label>
+                        </div>
+                        <div className=" mb-3">
+                            <label htmlFor="description" className="form-label">Description</label>
+                            <textarea
+                                className={classNames("form-control", { "is-invalid": errors.description && touched.description })}
+
+                                id="description"
+                                name="description"
+                                style={{ height: "100px" }}
+                                value={values.description}
+                                onChange={handleChange}
+                            ></textarea>
+                            {errors.description && touched.description && <div className="invalid-feedback">{errors.description}</div>}
+
+                        </div>
+
+                        <button type="submit" className="btn btn-primary">
+                            Save
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        )
     );
 };
 export default EditCategory;

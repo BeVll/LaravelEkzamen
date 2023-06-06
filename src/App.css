@@ -8,7 +8,16 @@
   src: local("Titillium WebLight"), local("TitilliumWeb-Light"), url(http://themes.googleusercontent.com/static/fonts/titilliumweb/v2/anMUvcNT0H1YN4FII8wpr24bNCNEoFTpS2BTjF6FB5E.woff) format("woff");
 }
 body {
-  background-color: #EFF2F7;
+  background-color: #EFF2F7 !important;
+}
+
+.pageContent {
+  margin-left: 76px;
+}
+
+.btn-primary {
+  background-color: #21232F !important;
+  border-color: #21232F !important;
 }
 
 .iconMenu {
@@ -28,8 +37,9 @@ body {
   color: #21232F;
 }
 
-.content {
-  margin-left: 76px;
+.img {
+  color: #a30404;
+  font-weight: bold;
 }
 
 .main-menu {
@@ -57,8 +67,37 @@ body {
   bottom: 0;
   padding: 15px;
 }
-.main-menu .logout li a:hover {
+.main-menu .logout .log a:hover {
   background-color: #a30404;
+}
+.main-menu .profile {
+  overflow: hidden;
+  transition: 0.4s;
+}
+.main-menu .profile .profileImg {
+  width: 46px;
+  height: 46px;
+  background-size: cover;
+  border-radius: 50%;
+  transition: 0.4s;
+}
+.main-menu .profile:hover .profileImg {
+  width: 70px;
+  height: 70px;
+  border-radius: 0;
+}
+.main-menu .profile:hover a {
+  transition: 0.4s;
+}
+.main-menu .profile:hover a:hover {
+  background-color: #21232F;
+  height: 70px;
+}
+.main-menu .profile a {
+  transition: 0.4s;
+}
+.main-menu .profile .email {
+  margin-left: 10px;
 }
 .main-menu ul {
   padding: 0 15px;
@@ -151,6 +190,7 @@ input[type=file]::file-selector-button:hover {
   justify-content: center;
   align-items: start;
   padding: 40px;
+  width: 100% !important;
 }
 .pageList .ListColumn {
   background-color: #FFFFFF;
@@ -226,6 +266,37 @@ input[type=file]::file-selector-button:hover {
   color: white;
   font-size: 12px;
   font-weight: bold;
+}
+
+.loginBG {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-image: url(../public/images/bg.jpg);
+  filter: blur(2px);
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+}
+
+.loginPage {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.loginPage .block {
+  background-color: #FFFFFF;
+  padding: 40px;
+  width: 400px;
+  border-radius: 15px;
+  z-index: 2;
+  position: absolute;
 }
 
 .error {

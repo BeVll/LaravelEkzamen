@@ -7,9 +7,13 @@ import axios from "axios";
 import { APP_ENV } from "../../../env";
 import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { Modal } from 'bootstrap';
+import { useDispatch, useSelector } from "react-redux";
+import { AuthUserActionType, IAuthUser } from "../../auth/types";
+
+import Sidebar from "../../home/sidebar/SideBar";
 
 const ViewCategories = () => {
-
+    const { isAuth, user } = useSelector((store: any) => store.auth as IAuthUser);
     const navigator = useNavigate();
     const [items, setItems] = useState<ICategoryResponse>({
         data: [],
@@ -28,16 +32,21 @@ const ViewCategories = () => {
     });
 
     useEffect(() => {
-        setLoading(true);
-        axios.get<ICategoryResponse>(
-            `${APP_ENV.BASE_URL}/categories`, {
-            params: search,
-        })
-            .then((res) => {
-                setLoading(false);
-                console.log(isLoading);
-                setItems(res.data);
+        if (isAuth) {
+            setLoading(true);
+            axios.get<ICategoryResponse>(
+                `${APP_ENV.BASE_URL}/categories`, {
+                params: search,
             })
+                .then((res) => {
+                    setLoading(false);
+                    console.log(isLoading);
+                    setItems(res.data);
+                });
+        }
+        else{
+            navigator("/login");
+        }
 
     }, []);
 
@@ -113,102 +122,106 @@ const ViewCategories = () => {
 
 
     return (
-
-        isLoading ? (
-            <div className="loader-container">
-                <div className="spinner"></div>
-            </div>
-        ) : (
-            <div className='pageList'>
-                <div className='ListColumn'>
-                    <div className='tableHeader'>
-                        <h2>Categories</h2>
-                        <Link to="/Addcategory" className='btn btn-success'>
-                            <i className='fa fa-2x fa-plus-circle'></i>
-                            <span>Add</span>
-                        </Link>
-                    </div>
-                    <table className="table listCategories">
-                        <thead>
-                            <tr>
-                                <th>
-                                    <input type='checkbox' className='form-check-input allCheck'></input>
-                                </th>
-                                <th>
-                                    Id
-                                </th>
-                                <th>
-                                    Image
-                                </th>
-                                <th>
-                                    Name
-                                </th>
-                                <th>
-                                    Status
-                                </th>
-                                <th>
-                                    Description
-                                </th>
-                                <th>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {items.data ? (
-
-                                items.data.map((item: ICategory) => (
-                                    <tr key={item.id}>
-                                        <td>
-                                            <input type='checkbox' className='form-check-input'></input>
-                                        </td>
-                                        <td>
-                                            {item.id}
-                                        </td>
-                                        <td>
-                                            <img src={'http://bevl.com/storage/images/categories/' + item.image} height={60}></img>
-                                        </td>
-                                        <td>
-                                            {item.name}
-                                        </td>
-                                        <td>
-                                            {item.status == true ? <div className='ok'><span>Activated</span></div> : <div className='no'><span>Not working</span></div>}
-                                        </td>
-                                        <td>
-                                            {item.description}
-                                        </td>
-                                        <td>
-                                            <a  onClick={() => deleteCategory(item.id)} ><i className='fa fa-trash btnDelete'></i></a>
-                                            <Link to={"/Editcategory?id=" + item.id}><i className='fa fa-edit btnEdit'></i></Link>
-                                        </td>
-
-                                    </tr>
-                                ))
-
-                            )
-                                :
-                                null}
-
-                        </tbody>
-                    </table>
-                    <ul className="pagination justify-content-center">{pagination}</ul>
+        <div className="pageContent">
+            <Sidebar page={2} />
+            {isLoading ? (
+                <div className="loader-container">
+                    <div className="spinner"></div>
                 </div>
-                <div className="modal fade" id="exampleModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div className="modal-dialog">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title" id="exampleModalLabel">Confirm delete</h5>
-                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
+            ) : (
+                <div className='pageList'>
+                    <div className='ListColumn'>
+                        <div className='tableHeader'>
+                            <h2>Categories</h2>
+                            <Link to="/Addcategory" className='btn btn-success'>
+                                <i className='fa fa-2x fa-plus-circle'></i>
+                                <span>Add</span>
+                            </Link>
+                        </div>
+                        <table className="table listCategories">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <input type='checkbox' className='form-check-input allCheck'></input>
+                                    </th>
+                                    <th>
+                                        Id
+                                    </th>
+                                    <th>
+                                        Image
+                                    </th>
+                                    <th>
+                                        Name
+                                    </th>
+                                    <th>
+                                        Status
+                                    </th>
+                                    <th>
+                                        Description
+                                    </th>
+                                    <th>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {items.data ? (
 
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" >Cancel</button>
-                                <button type="button" onClick={() => deleteConfirmed()} className="btn btn-primary" data-bs-dismiss="modal">Delete</button>
+                                    items.data.map((item: ICategory) => (
+                                        <tr key={item.id}>
+                                            <td>
+                                                <input type='checkbox' className='form-check-input'></input>
+                                            </td>
+                                            <td>
+                                                {item.id}
+                                            </td>
+                                            <td>
+
+                                                <img src={'http://bevl.com/storage/images/categories/' + item.image} height={60}></img>
+                                            </td>
+                                            <td>
+                                                {item.name}
+                                            </td>
+                                            <td>
+                                                {item.status == true ? <div className='ok'><span>Activated</span></div> : <div className='no'><span>Not working</span></div>}
+                                            </td>
+                                            <td>
+                                                {item.description}
+                                            </td>
+                                            <td>
+                                                <a onClick={() => deleteCategory(item.id)} ><i className='fa fa-trash btnDelete'></i></a>
+                                                <Link to={"/Editcategory?id=" + item.id}><i className='fa fa-edit btnEdit'></i></Link>
+                                            </td>
+
+                                        </tr>
+                                    ))
+
+                                )
+                                    :
+                                    null}
+
+                            </tbody>
+                        </table>
+                        <ul className="pagination justify-content-center">{pagination}</ul>
+                    </div>
+                    <div className="modal fade" id="exampleModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div className="modal-dialog">
+                            <div className="modal-content">
+                                <div className="modal-header">
+                                    <h5 className="modal-title" id="exampleModalLabel">Confirm delete</h5>
+                                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+
+                                <div className="modal-footer">
+                                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" >Cancel</button>
+                                    <button type="button" onClick={() => deleteConfirmed()} className="btn btn-primary" data-bs-dismiss="modal">Delete</button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        )
+            )}
+        </div>
+
     );
 };
 export default ViewCategories;
