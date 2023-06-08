@@ -14,6 +14,8 @@ import { AuthUserActionType, IUser } from "./components/auth/types";
 import {http} from "./http";
 import LoginView from './components/auth/login/LoginView';
 import RegistrationView from './components/auth/registration/RegistrationView';
+import ViewProducts from './components/product/view/ViewProducts';
+import CreateProduct from './components/product/create/CreateProduct';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -41,6 +43,8 @@ root.render(
           <Route path="Editcategory" element={<EditCategory />} />
           <Route path="login" element={<LoginView />} />
           <Route path="register" element={<RegistrationView />} />
+          <Route path="products" element={<ViewProducts />} />
+          <Route path="Addproduct" element={<CreateProduct />} />
         </Route>
       </Routes>
     </BrowserRouter>
