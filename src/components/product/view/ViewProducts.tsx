@@ -90,7 +90,7 @@ const ViewProducts = () => {
         console.log(1);
 
 
-        http.delete('/products/' + deleteId)
+        http.delete('/product/' + deleteId)
             .then(() => {
                 http.get(
                     "/products")
@@ -102,7 +102,7 @@ const ViewProducts = () => {
             });
     }
 
-    const deleteCategory = (id: number) => {
+    const deleteProduct = (id: number) => {
         console.log(id);
         const myElement = document.getElementById("exampleModal") as HTMLElement;
         setId(id);
@@ -197,8 +197,8 @@ const ViewProducts = () => {
                                                 {item.category_id}
                                             </td>
                                             <td>
-                                                <a onClick={() => deleteCategory(item.id)} ><i className='fa fa-trash btnDelete'></i></a>
-                                                <Link to={"/Editcategory?id=" + item.id}><i className='fa fa-edit btnEdit'></i></Link>
+                                                <a onClick={() => deleteProduct(item.id)} ><i className='fa fa-trash btnDelete'></i></a>
+                                                <Link to={"/Editproduct?id=" + item.id}><i className='fa fa-edit btnEdit'></i></Link>
                                             </td>
 
                                         </tr>
