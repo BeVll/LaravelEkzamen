@@ -1,6 +1,6 @@
 export interface IProductCreate {
     name: string,
-    image: File,
+    images: File[],
     status: boolean
     description: string,
     priority: number,

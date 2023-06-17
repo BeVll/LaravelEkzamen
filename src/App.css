@@ -321,6 +321,13 @@ input[type=checkbox] {
   z-index: 1;
 }
 
+.deleteBtn {
+  border-radius: 20px 20px 0px 0px !important;
+  width: 120px;
+  height: 30px;
+  padding: 0 !important;
+}
+
 .spinner {
   width: 64px;
   height: 64px;
