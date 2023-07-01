@@ -18,6 +18,7 @@ import ViewProducts from './components/product/view/ViewProducts';
 import CreateProduct from './components/product/create/CreateProduct';
 import EditProduct from './components/product/edit/EditProduct';
 
+
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
@@ -46,7 +47,6 @@ root.render(
           <Route path="register" element={<RegistrationView />} />
           <Route path="products" element={<ViewProducts />} />
           <Route path="Addproduct" element={<CreateProduct />} />
-          <Route path="Editproduct" element={<EditProduct />} />
         </Route>
       </Routes>
     </BrowserRouter>

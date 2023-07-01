@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import React, { ChangeEvent, FormEvent, useState, useEffect } from "react";
+import React, { useRef, ChangeEvent, FormEvent, useState, useEffect } from "react";
 import { ICategory, ICategoryResponse, IProductCreate } from "./types";
 import * as yup from "yup";
 import classNames from "classnames";
@@ -10,7 +10,15 @@ import { AuthUserActionType, IAuthUser } from "../../auth/types";
 import { useDispatch, useSelector } from "react-redux";
 import { formHttp, http } from "../../../http";
 
+import { Editor } from '@tinymce/tinymce-react';
+
 const CreateProduct = () => {
+    const editorRef = useRef(null);
+    const log = () => {
+      if (editorRef.current) {
+        console.log(editorRef.current);
+      }
+    };
 
     const navigator = useNavigate();
     const [image, setImage] = useState<string>();
@@ -85,13 +93,15 @@ const CreateProduct = () => {
         input.click();
     }
 
-    const removeImage = (index:number) => {
-        
+
+
+    const removeImage = (index: number) => {
+
         var images = values.images;
         images.splice(index, 1);
         setFieldValue("images", images);
-                //console.log("Select file ", file);
-          
+        //console.log("Select file ", file);
+
     }
 
     const formik = useFormik({
@@ -148,7 +158,7 @@ const CreateProduct = () => {
                                         alt="Оберіть фото"
                                         style={{ cursor: "pointer" }}
                                         width={120}
-                 
+
                                     />
                                 </div>
                             ))}
@@ -206,7 +216,30 @@ const CreateProduct = () => {
                         </div>
                         <div className="mb-3">
                             <label htmlFor="description" className="form-label">Description</label>
-                            <textarea
+                            <Editor
+                                onInit={(evt, editor) => {}}
+                                initialValue="<p>This is the initial content of the editor.</p>"
+                                init={{
+                                    height: 500,
+                                    menubar: false,
+                                    plugins: [
+                                        'advlist autolink lists link image charmap print preview anchor',
+                                        'searchreplace visualblocks code fullscreen',
+                                        'insertdatetime media table paste code help wordcount'
+                                    ],
+                                    toolbar: 'undo redo | formatselect | ' +
+                                        'bold italic backcolor | alignleft aligncenter ' +
+                                        'alignright alignjustify | bullist numlist outdent indent | ' +
+                                        'removeformat | help',
+                                    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+                                }}
+                                onEditorChange={(e) => {
+                                    handleChange({ target: { name: 'description', value: e } })
+                                }}
+                            />
+                            <button onClick={log}>Log editor content</button>
+                    
+                        {/* <textarea
                                 className={classNames("form-control", { "is-invalid": errors.description && touched.description })}
                                 placeholder="Вкажіть опис"
                                 id="description"
@@ -214,17 +247,17 @@ const CreateProduct = () => {
                                 style={{ height: "100px" }}
                                 value={values.description}
                                 onChange={handleChange}
-                            ></textarea>
-                            {errors.description && touched.description && <div className="invalid-feedback">{errors.description}</div>}
+                            ></textarea> */}
+                        {errors.description && touched.description && <div className="invalid-feedback">{errors.description}</div>}
 
-                        </div>
-
-                        <button type="submit" className="btn btn-primary">
-                            Add
-                        </button>
-                    </form>
                 </div>
-            </div>
+
+                <button type="submit" className="btn btn-primary">
+                    Add
+                </button>
+            </form>
+                </div >
+            </div >
         )
     );
 };

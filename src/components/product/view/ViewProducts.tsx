@@ -9,7 +9,7 @@ import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { Modal } from 'bootstrap';
 import { useDispatch, useSelector } from "react-redux";
 import { AuthUserActionType, IAuthUser } from "../../auth/types";
-import {http} from "../../../http";
+import { http } from "../../../http";
 
 import Sidebar from "../../home/sidebar/SideBar";
 
@@ -45,7 +45,7 @@ const ViewProducts = () => {
                     setItems(res.data);
                 });
         }
-        else{
+        else {
             navigator("/login");
         }
 
@@ -185,7 +185,7 @@ const ViewProducts = () => {
                                                 {item.status == true ? <div className='ok'><span>Activated</span></div> : <div className='no'><span>Not working</span></div>}
                                             </td>
                                             <td>
-                                                {item.description}
+                                                <div dangerouslySetInnerHTML={{ __html: item.description }} />
                                             </td>
                                             <td>
                                                 {item.price}
@@ -198,7 +198,7 @@ const ViewProducts = () => {
                                             </td>
                                             <td>
                                                 <a onClick={() => deleteProduct(item.id)} ><i className='fa fa-trash btnDelete'></i></a>
-                                                <Link to={"/Editproduct?id=" + item.id}><i className='fa fa-edit btnEdit'></i></Link>
+                                                {/* <Link to={"/Editproduct?id=" + item.id}><i className='fa fa-edit btnEdit'></i></Link> */}
                                             </td>
 
                                         </tr>
